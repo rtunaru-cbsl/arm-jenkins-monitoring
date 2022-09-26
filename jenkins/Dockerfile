@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:2.289.3
+FROM jenkins/jenkins:2.332.3-lts
 
 # Add Jenkins init files
 COPY src/ /usr/share/jenkins/ref/

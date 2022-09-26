@@ -1,4 +1,4 @@
-FROM grafana/grafana:5.4.3
+FROM grafana/grafana:latest
 
 COPY datasources/prometheus.yaml /etc/grafana/provisioning/datasources/
 COPY dashboards/dashboard-provider.yaml /etc/grafana/provisioning/dashboards/
