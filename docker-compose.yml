@@ -1,58 +1,6 @@
 version: "3.7"
 
 services:
-  jenkins:
-    build: ./jenkins
-    image: jenkins-customized
-    volumes: 
-      - jenkins-data:/var/jenkins_home
-    ports: 
-      - "8080:8080"
-    networks: 
-      - monit-network
-    env_file: .env
-    expose: 
-      - 8080
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-      start_period: 40s
-
-  jenkins-initializer:
-    build: ./jenkins-initializer
-    image: jenkins-initializer
-    networks: 
-      - monit-network
-    depends_on: 
-      jenkins:
-          condition: service_healthy
-        
-  jenkins-exporter:
-    build: ./jenkins-exporter      
-    image: jenkins-exporter
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./jenkins-exporter/exporter.py:/usr/src/app/exporter.py
-    depends_on: 
-      - jenkins
-    expose: 
-      - 8000    
-    networks: 
-      - monit-network     
-    depends_on: 
-      jenkins:
-        condition: service_healthy   
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-      start_period: 40s              
-
-
   prometheus:
     build: ./prometheus
     image: prom/prometheus:v2.3.1
@@ -64,9 +12,6 @@ services:
       - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
     expose: 
       - 9090
-    depends_on: 
-      jenkins-exporter:
-        condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "http://localhost:9090"]
       interval: 10s
