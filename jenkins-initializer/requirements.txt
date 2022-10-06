@@ -1,1 +1,0 @@
-api4jenkins==v1.6
